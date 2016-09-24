@@ -29,7 +29,6 @@ public class CommentHelper {
                     CommentTagHandler.TAG_CONTENT, content, CommentTagHandler.TAG_CONTENT);
         }
         textView.setText(Html.fromHtml(formatText, null, tagHandler));
-        textView.setClickable(true);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setTag(CommentTagHandler.KEY_COMMENTOR, commentUser);
         textView.setTag(CommentTagHandler.KEY_REPLYER, replayUser);
