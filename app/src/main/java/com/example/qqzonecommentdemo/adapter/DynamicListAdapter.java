@@ -39,7 +39,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     public void onBindViewHolder(DynamicViewHolder holder, int position) {
         Dynamic dynamic = dynamicList.get(position);
         List<Comment> commentList = dynamic.getCommentList();
-        holder.comment_count_tv.setText("comment(" + commentList.size() + ")");
+        holder.comment_count_tv.setText("评论(" + commentList.size() + ")");
 
         holder.commentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         CommentListAdapter adapter = new CommentListAdapter(context, commentList);
