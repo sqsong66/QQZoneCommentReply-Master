@@ -11,6 +11,7 @@ import java.util.List;
 public class Dynamic implements Parcelable {
 
     private String content;
+    private int imageCount;
     private List<Comment> commentList;
 
     public Dynamic() {
@@ -18,12 +19,14 @@ public class Dynamic implements Parcelable {
 
     protected Dynamic(Parcel in) {
         content = in.readString();
+        imageCount = in.readInt();
         commentList = in.createTypedArrayList(Comment.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(content);
+        dest.writeInt(imageCount);
         dest.writeTypedList(commentList);
     }
 
@@ -43,6 +46,22 @@ public class Dynamic implements Parcelable {
             return new Dynamic[size];
         }
     };
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getImageCount() {
+        return imageCount;
+    }
+
+    public void setImageCount(int imageCount) {
+        this.imageCount = imageCount;
+    }
 
     public List<Comment> getCommentList() {
         return commentList;

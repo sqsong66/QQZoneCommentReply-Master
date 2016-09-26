@@ -9,4 +9,9 @@
     <color name="bg_line">#e5e5e5</color>
     <color name="colorNormalLinks">#295998</color>
     <color name="color_black">#000000</color>
+
+    <color name="color_comment_bg">#EBECEE</color>
+    <color name="color_comment_border">#CECFD0</color>
+    <color name="color_send_btn">#28B5EB</color>
+
 </resources>

@@ -39,15 +39,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEvents() {
-        mAdapter = new DynamicListAdapter(this, mDynamicList);
+        mAdapter = new DynamicListAdapter(recyclerView, this, mDynamicList);
         recyclerView.setAdapter(mAdapter);
     }
 
     private void initData() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             Dynamic dynamic = new Dynamic();
+            dynamic.setImageCount(2);
             List<Comment> commentList = new ArrayList<>();
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 6; j++) {
                 Comment comment = new Comment();
                 comment.setCommentUser(getUsre(j, 0));
                 if (j % 2 == 0) {

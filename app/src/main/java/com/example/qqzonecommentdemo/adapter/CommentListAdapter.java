@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.qqzonecommentdemo.R;
 import com.example.qqzonecommentdemo.model.Comment;
-import com.example.qqzonecommentdemo.model.User;
 import com.example.qqzonecommentdemo.utils.CommentHelper;
 import com.example.qqzonecommentdemo.utils.CommentTagHandler;
 
@@ -27,27 +25,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     private CommentHelper commentHelper;
     private CommentTagHandler tagHandler;
 
-    public CommentListAdapter(final Context context, List<Comment> commentList) {
+    public CommentListAdapter(final Context context, List<Comment> commentList, CommentTagHandler.OnCommentClickListener listener) {
         this.context = context;
         this.commentList = commentList;
         this.inflater = LayoutInflater.from(context);
         this.commentHelper = new CommentHelper();
-        this.tagHandler = new CommentTagHandler(context, new CommentTagHandler.OnCommentClickListener() {
-            @Override
-            public void onCommentorClicked(View view, User commentUser) {
-                Toast.makeText(context, commentUser.getName(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onReplyerClicked(View view, User replyUser) {
-                Toast.makeText(context, replyUser.getName(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCommentContentClicked(View view, String content, User commentUser, User replyUser) {
-                Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
-            }
-        });
+        this.tagHandler = new CommentTagHandler(context, listener);
     }
 
     @Override
@@ -59,6 +42,9 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
+        holder.comment_tv.setTag(CommentTagHandler.KEY_COMMENT_LIST, commentList);
+        holder.comment_tv.setTag(CommentTagHandler.KEY_COMMENT_ADAPTER, this);
+        holder.comment_tv.setTag(CommentTagHandler.KEY_COMMENT_ITEM_POSITION, position);
         commentHelper.formatCommentText(comment, holder.comment_tv, tagHandler);
     }
 
