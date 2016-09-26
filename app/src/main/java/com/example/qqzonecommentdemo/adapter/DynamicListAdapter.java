@@ -72,7 +72,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 int id = user.getId();
                 if (id == myId) {
                     commentList.remove(pos);
-                    commentAdapter.notifyItemRemoved(pos);
+                    commentAdapter.notifyDataSetChanged();
                     Toast.makeText(context, "删除自己的评论", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -206,7 +206,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         comment.setCommentUser(commentUser);
         comment.setContent(input_edit.getText().toString());
         commentList.add(0, comment);
-        commentAdapter.notifyItemInserted(0);
+        commentAdapter.notifyDataSetChanged();
         input_edit.setText("");
 
         if (popupWindow.isShowing()) {
