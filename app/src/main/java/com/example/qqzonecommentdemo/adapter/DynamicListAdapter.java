@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 }
 
                 String replyName = user.getName();
-                input_edit.setHint("回复:" + replyName);
+                input_edit.setHint("回复" + replyName);
                 send_btn.setTag(CommentTagHandler.KEY_REPLYER, user);
                 send_btn.setTag(CommentTagHandler.KEY_COMMENT_LIST, commentList);
                 send_btn.setTag(CommentTagHandler.KEY_COMMENT_ADAPTER, commentAdapter);
@@ -110,7 +111,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             int[] viewLocation = new int[2];
             view.getLocationOnScreen(viewLocation);
             final int viewY = viewLocation[1];
-            if (commentViewY == 0) { //避免每次都延迟滚动到指定位置
+            if (commentViewY == 0 || commentViewY == (DensityUtil.getScreenHeight() - commentView.getHeight())) { //避免每次都延迟滚动到指定位置
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -189,6 +190,10 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     }
 
     private void startReply(View view) {
+        if (TextUtils.isEmpty(input_edit.getText().toString())) {
+            Toast.makeText(view.getContext(), "输入内容不可以为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Object tag = view.getTag(CommentTagHandler.KEY_REPLYER);
         User commentUser;
         User replayUser = null;
@@ -206,6 +211,8 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         comment.setCommentUser(commentUser);
         comment.setContent(input_edit.getText().toString());
         commentList.add(0, comment);
+        // 此处不能使用Adapter的notifyItemInserted方法，因为当点击该item时，
+        // 需要使用到该item的position，如果使用notifyItemInserted方法会导致位置错乱
         commentAdapter.notifyDataSetChanged();
         input_edit.setText("");
 

@@ -1,7 +1,7 @@
 package com.example.qqzonecommentdemo.utils;
 
+import android.os.Build;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import com.example.qqzonecommentdemo.model.Comment;
@@ -28,8 +28,13 @@ public class CommentHelper {
                     CommentTagHandler.TAG_COMMENTOR, commentUser.getName(), CommentTagHandler.TAG_COMMENTOR,
                     CommentTagHandler.TAG_CONTENT, content, CommentTagHandler.TAG_CONTENT);
         }
-        textView.setText(Html.fromHtml(formatText, null, tagHandler));
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textView.setText(Html.fromHtml(formatText, Html.FROM_HTML_MODE_LEGACY, null, tagHandler));
+        } else {
+            textView.setText(Html.fromHtml(formatText, null, tagHandler));
+        }
+        textView.setClickable(true);
+        textView.setMovementMethod(new LinkTouchMovementMethod());
         textView.setTag(CommentTagHandler.KEY_COMMENTOR, commentUser);
         textView.setTag(CommentTagHandler.KEY_REPLYER, replayUser);
         textView.setTag(CommentTagHandler.KEY_CONTENT, content);

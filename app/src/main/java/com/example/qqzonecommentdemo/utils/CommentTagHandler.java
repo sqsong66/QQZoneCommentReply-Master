@@ -6,7 +6,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.text.style.TextAppearanceSpan;
 import android.view.View;
 
 import com.example.qqzonecommentdemo.R;
@@ -72,30 +71,32 @@ public class CommentTagHandler implements Html.TagHandler {
             int end = editable.length();
             if (tag.equalsIgnoreCase(TAG_COMMENTOR)) {
                 int start = mMaps.get(KEY_COMMENTOR_START);
-                editable.setSpan(new TextAppearanceSpan(context, R.style.Comment), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editable.setSpan(commentorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else if (tag.equalsIgnoreCase(TAG_REPLYER)) {
                 int start = mMaps.get(KEY_REPLYER_START);
-                editable.setSpan(new TextAppearanceSpan(context, R.style.Comment), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editable.setSpan(replyerSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else if (tag.equalsIgnoreCase(TAG_CONTENT)) {
                 int start = mMaps.get(KEY_CONTENT_START);
-                editable.setSpan(new TextAppearanceSpan(context, R.style.Comment), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editable.setSpan(contentSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
 
-    class BasicClickableSpan extends ClickableSpan {
+    public static class BasicClickableSpan extends ClickableSpan {
 
         private Context context;
         private int clickType;
+        private boolean mIsPressed;
         private OnCommentClickListener listener;
 
         public BasicClickableSpan(Context context, int clickType, OnCommentClickListener l) {
             this.context = context;
             this.clickType = clickType;
             this.listener = l;
+        }
+
+        public void setPressed(boolean isSelected) {
+            mIsPressed = isSelected;
         }
 
         @Override
@@ -127,18 +128,22 @@ public class CommentTagHandler implements Html.TagHandler {
             if (clickType == CLICK_TYPE_CONTENT) {
                 ds.setColor(context.getResources().getColor(R.color.color_808080));
             } else {
-                ds.setColor(context.getResources().getColor(R.color.colorNormalLinks));
+                ds.setColor(ds.linkColor/*context.getResources().getColor(R.color.colorNormalLinks)*/);
             }
+            ds.bgColor = mIsPressed ? 0xffdfdfdf : 0xfffafafa;
             ds.setUnderlineText(false);
         }
     }
 
+    /**
+     * 评论条目点击事件监听器
+     */
     public interface OnCommentClickListener {
-
+        /** 评论者点击事件*/
         void onCommentorClicked(View view, User commentUser);
-
+        /** 回复者点击事件*/
         void onReplyerClicked(View view, User replyUser);
-
+        /** 回复内容点击事件*/
         void onCommentContentClicked(View view, String content, User commentUser, User replyUser);
 
     }

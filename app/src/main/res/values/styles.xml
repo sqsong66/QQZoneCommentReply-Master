@@ -17,7 +17,4 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Comment" parent="android:TextAppearance">
-        <item name="android:textSize">14dp</item>
-    </style>
 </resources>
