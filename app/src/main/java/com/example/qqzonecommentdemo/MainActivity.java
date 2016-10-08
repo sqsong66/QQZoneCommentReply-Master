@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
             List<Comment> commentList = new ArrayList<>();
             for (int j = 0; j < 6; j++) {
                 Comment comment = new Comment();
-                comment.setCommentUser(getUsre(j, 0));
+                comment.setCommentUser(getUser(j, 0));
                 if (j % 2 == 0) {
                     comment.setContent("哈哈，这图片蛮漂亮的!");
                 } else {
-                    comment.setReplayUser(getUsre(j, 1));
+                    comment.setReplayUser(getUser(j, 1));
                     comment.setContent("赞同，确实不错!");
                 }
                 commentList.add(comment);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    private User getUsre(int index, int type) {
+    private User getUser(int index, int type) {
         User user = new User();
         user.setId(index);
         if (type == 0) {

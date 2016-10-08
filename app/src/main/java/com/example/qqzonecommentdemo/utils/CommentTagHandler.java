@@ -53,6 +53,13 @@ public class CommentTagHandler implements Html.TagHandler {
         this.contentSpan = new BasicClickableSpan(context, CLICK_TYPE_CONTENT, l);
     }
 
+    /**
+     * 处理自定义标签
+     * @param opening 是否是开始标签； true为开始标签， false为结束标签
+     * @param tag 标签名称
+     * @param editable 可编辑的内容
+     * @param xmlReader xml解析器
+     */
     @Override
     public void handleTag(boolean opening, String tag, Editable editable, XMLReader xmlReader) {
         if (!tag.equalsIgnoreCase(TAG_COMMENTOR) && !tag.equalsIgnoreCase(TAG_CONTENT) && !tag.equalsIgnoreCase(TAG_REPLYER)) {
@@ -128,7 +135,7 @@ public class CommentTagHandler implements Html.TagHandler {
             if (clickType == CLICK_TYPE_CONTENT) {
                 ds.setColor(context.getResources().getColor(R.color.color_808080));
             } else {
-                ds.setColor(ds.linkColor/*context.getResources().getColor(R.color.colorNormalLinks)*/);
+                ds.setColor(ds.linkColor);
             }
             ds.bgColor = mIsPressed ? 0xffdfdfdf : 0xfffafafa;
             ds.setUnderlineText(false);
@@ -145,7 +152,5 @@ public class CommentTagHandler implements Html.TagHandler {
         void onReplyerClicked(View view, User replyUser);
         /** 回复内容点击事件*/
         void onCommentContentClicked(View view, String content, User commentUser, User replyUser);
-
     }
-
 }

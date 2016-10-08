@@ -55,22 +55,23 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         this.inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         this.listener = new CommentTagHandler.OnCommentClickListener() {
             @Override
-            public void onCommentorClicked(View view, User commentUser) {
+            public void onCommentorClicked(View view, User commentUser) { // 点击评论者
                 Toast.makeText(context, commentUser.getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onReplyerClicked(View view, User replyUser) {
+            public void onReplyerClicked(View view, User replyUser) { //点击回复者
                 Toast.makeText(context, replyUser.getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onCommentContentClicked(View view, String content, User commentUser, User replyUser) {
+            public void onCommentContentClicked(View view, String content, User commentUser, User replyUser) { //点击评论内容
                 User user = replyUser != null ? replyUser : commentUser;
                 List<Comment> commentList = (List<Comment>) view.getTag(CommentTagHandler.KEY_COMMENT_LIST);
                 CommentListAdapter commentAdapter = (CommentListAdapter) view.getTag(CommentTagHandler.KEY_COMMENT_ADAPTER);
                 int pos = (Integer) view.getTag(CommentTagHandler.KEY_COMMENT_ITEM_POSITION);
                 int id = user.getId();
+                // 如果点击的评论是自己发出的，则删除该评论
                 if (id == myId) {
                     commentList.remove(pos);
                     commentAdapter.notifyDataSetChanged();
@@ -100,6 +101,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         popupWindow = new PopupWindow(commentView, params.width, params.height);
         popupWindow.setBackgroundDrawable(new ColorDrawable(0));
         popupWindow.setOutsideTouchable(true);
+        // 该方法很重要，只有设置了该方法为true时，当软键盘弹出时才会将评论框顶起来
         popupWindow.setFocusable(true);
     }
 
@@ -111,7 +113,9 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             int[] viewLocation = new int[2];
             view.getLocationOnScreen(viewLocation);
             final int viewY = viewLocation[1];
-            if (commentViewY == 0 || commentViewY == (DensityUtil.getScreenHeight() - commentView.getHeight())) { //避免每次都延迟滚动到指定位置
+            // 避免每次都延迟滚动到指定位置，所以记录第一次获取到的评论框的位置
+            // 延迟的目的是留足够的时间让评论框弹出来
+            if (commentViewY == 0 || commentViewY == (DensityUtil.getScreenHeight() - commentView.getHeight())) {
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
