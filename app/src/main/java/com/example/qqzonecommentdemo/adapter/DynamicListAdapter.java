@@ -1,6 +1,8 @@
 package com.example.qqzonecommentdemo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +33,7 @@ import java.util.List;
  */
 public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.DynamicViewHolder> implements View.OnClickListener {
 
+    private Activity activity;
     private Context context;
     private int imageHeight;
     private View commentView;
@@ -46,8 +49,9 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 
     private int myId = 102;
 
-    public DynamicListAdapter(RecyclerView recyclerView, final Context context, List<Dynamic> dynamicList) {
-        this.context = context;
+    public DynamicListAdapter(RecyclerView recyclerView, final Activity activity, List<Dynamic> dynamicList) {
+        this.activity = activity;
+        this.context = activity.getApplicationContext();
         this.dynamicList = dynamicList;
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
@@ -119,9 +123,9 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        int[] commentLocation = new int[2];
-                        commentView.getLocationOnScreen(commentLocation);
-                        commentViewY = commentLocation[1];
+                        Rect r = new Rect();
+                        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+                        commentViewY = r.bottom - popupWindow.getContentView().getMeasuredHeight();
                         int offsetY =  viewY - commentViewY + view.getHeight();
                         recyclerView.smoothScrollBy(0, offsetY);
                     }
